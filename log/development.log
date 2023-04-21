@@ -1,0 +1,725 @@
+  [1m[35m (6.4ms)[0m  [1m[35mCREATE DATABASE `api_development` DEFAULT CHARACTER SET `utf8mb4`[0m
+  [1m[35m (3.0ms)[0m  [1m[35mCREATE DATABASE `api_test` DEFAULT CHARACTER SET `utf8mb4`[0m
+  [1m[35m (27.1ms)[0m  [1m[35mCREATE TABLE `schema_migrations` (`version` varchar(255) NOT NULL PRIMARY KEY)[0m
+  [1m[35m (24.2ms)[0m  [1m[35mCREATE TABLE `ar_internal_metadata` (`key` varchar(255) NOT NULL PRIMARY KEY, `value` varchar(255), `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL)[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT GET_LOCK('5878493172211724820', 0)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.8ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+Migrating to CreateInitialSchema (20230421112245)
+  [1m[35m (1.4ms)[0m  [1m[35mDROP TABLE IF EXISTS `boards` CASCADE[0m
+  [1m[35m (20.2ms)[0m  [1m[35mCREATE TABLE `boards` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `title` varchar(255), `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL, `user_id` int DEFAULT 7, INDEX `index_boards_on_user_id` (`user_id`)) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci[0m
+  [1m[35m (1.0ms)[0m  [1m[35mDROP TABLE IF EXISTS `columns` CASCADE[0m
+  [1m[35m (24.1ms)[0m  [1m[35mCREATE TABLE `columns` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `title` varchar(255), `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL, `board_id` bigint NOT NULL, `position` int, INDEX `index_columns_on_board_id` (`board_id`)) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci[0m
+  [1m[35m (1.5ms)[0m  [1m[35mDROP TABLE IF EXISTS `stories` CASCADE[0m
+  [1m[35m (20.0ms)[0m  [1m[35mCREATE TABLE `stories` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `title` varchar(255), `content` varchar(255), `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL, `column_id` bigint NOT NULL, `status` int, `due_date` date, INDEX `index_stories_on_column_id` (`column_id`)) DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci[0m
+  [1m[35m (75.1ms)[0m  [1m[35mALTER TABLE `columns` ADD CONSTRAINT `fk_rails_6754036daa`
+FOREIGN KEY (`board_id`)
+  REFERENCES `boards` (`id`)
+[0m
+  [1m[35m (49.6ms)[0m  [1m[35mALTER TABLE `stories` ADD CONSTRAINT `fk_rails_a91b8fc2b9`
+FOREIGN KEY (`column_id`)
+  REFERENCES `columns` (`id`)
+[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.4ms)[0m  [1m[32mINSERT INTO `schema_migrations` (`version`) VALUES ('20230421112245')[0m
+  [1m[36mTRANSACTION (1.8ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (1.6ms)[0m  [1m[34mSELECT `ar_internal_metadata`.* FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' LIMIT 1[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::InternalMetadata Create (0.4ms)[0m  [1m[32mINSERT INTO `ar_internal_metadata` (`key`, `value`, `created_at`, `updated_at`) VALUES ('environment', 'development', '2023-04-21 11:24:12.015945', '2023-04-21 11:24:12.015945')[0m
+  [1m[36mTRANSACTION (2.3ms)[0m  [1m[35mCOMMIT[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT RELEASE_LOCK('5878493172211724820')[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.3ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT GET_LOCK('5878493172211724820', 0)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.3ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+Migrating to RemoveUserIdFromBoards (20230421112733)
+  [1m[35m (42.7ms)[0m  [1m[35mALTER TABLE `boards` DROP COLUMN `user_id`[0m
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  [1m[36mActiveRecord::SchemaMigration Create (0.6ms)[0m  [1m[32mINSERT INTO `schema_migrations` (`version`) VALUES ('20230421112733')[0m
+  [1m[36mTRANSACTION (2.7ms)[0m  [1m[35mCOMMIT[0m
+  [1m[36mActiveRecord::InternalMetadata Load (0.4ms)[0m  [1m[34mSELECT `ar_internal_metadata`.* FROM `ar_internal_metadata` WHERE `ar_internal_metadata`.`key` = 'environment' LIMIT 1[0m
+  [1m[35m (0.3ms)[0m  [1m[34mSELECT RELEASE_LOCK('5878493172211724820')[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.3ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+Started POST "/boards" for ::1 at 2023-04-21 14:34:54 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.4ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[36mCACHE ActiveRecord::SchemaMigration Pluck (0.0ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  
+ActiveRecord::PendingMigrationError (
+
+Migrations are pending. To resolve this issue, run:
+
+        bin/rails db:migrate RAILS_ENV=development
+
+You have 3 pending migrations:
+
+20230421112828_create_boards.rb
+20230421112839_create_columns.rb
+20230421112845_create_stories.rb
+
+
+):
+  
+activerecord (7.0.4.3) lib/active_record/migration.rb:627:in `check_pending!'
+activerecord (7.0.4.3) lib/active_record/migration.rb:592:in `block (2 levels) in call'
+activesupport (7.0.4.3) lib/active_support/file_update_checker.rb:83:in `execute'
+activerecord (7.0.4.3) lib/active_record/migration.rb:597:in `block in call'
+activerecord (7.0.4.3) lib/active_record/migration.rb:589:in `synchronize'
+activerecord (7.0.4.3) lib/active_record/migration.rb:589:in `call'
+actionpack (7.0.4.3) lib/action_dispatch/middleware/callbacks.rb:27:in `block in call'
+activesupport (7.0.4.3) lib/active_support/callbacks.rb:99:in `run_callbacks'
+actionpack (7.0.4.3) lib/action_dispatch/middleware/callbacks.rb:26:in `call'
+actionpack (7.0.4.3) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (7.0.4.3) lib/action_dispatch/middleware/actionable_exceptions.rb:17:in `call'
+actionpack (7.0.4.3) lib/action_dispatch/middleware/debug_exceptions.rb:28:in `call'
+actionpack (7.0.4.3) lib/action_dispatch/middleware/show_exceptions.rb:26:in `call'
+railties (7.0.4.3) lib/rails/rack/logger.rb:40:in `call_app'
+railties (7.0.4.3) lib/rails/rack/logger.rb:25:in `block in call'
+activesupport (7.0.4.3) lib/active_support/tagged_logging.rb:99:in `block in tagged'
+activesupport (7.0.4.3) lib/active_support/tagged_logging.rb:37:in `tagged'
+activesupport (7.0.4.3) lib/active_support/tagged_logging.rb:99:in `tagged'
+railties (7.0.4.3) lib/rails/rack/logger.rb:25:in `call'
+actionpack (7.0.4.3) lib/action_dispatch/middleware/remote_ip.rb:93:in `call'
+actionpack (7.0.4.3) lib/action_dispatch/middleware/request_id.rb:26:in `call'
+rack (2.2.6.4) lib/rack/runtime.rb:22:in `call'
+activesupport (7.0.4.3) lib/active_support/cache/strategy/local_cache_middleware.rb:29:in `call'
+actionpack (7.0.4.3) lib/action_dispatch/middleware/server_timing.rb:61:in `block in call'
+actionpack (7.0.4.3) lib/action_dispatch/middleware/server_timing.rb:26:in `collect_events'
+actionpack (7.0.4.3) lib/action_dispatch/middleware/server_timing.rb:60:in `call'
+actionpack (7.0.4.3) lib/action_dispatch/middleware/executor.rb:14:in `call'
+actionpack (7.0.4.3) lib/action_dispatch/middleware/static.rb:23:in `call'
+rack (2.2.6.4) lib/rack/sendfile.rb:110:in `call'
+actionpack (7.0.4.3) lib/action_dispatch/middleware/host_authorization.rb:137:in `call'
+railties (7.0.4.3) lib/rails/engine.rb:530:in `call'
+puma (5.6.5) lib/puma/configuration.rb:252:in `call'
+puma (5.6.5) lib/puma/request.rb:77:in `block in handle_request'
+puma (5.6.5) lib/puma/thread_pool.rb:340:in `with_force_shutdown'
+puma (5.6.5) lib/puma/request.rb:76:in `handle_request'
+puma (5.6.5) lib/puma/server.rb:443:in `process_client'
+puma (5.6.5) lib/puma/thread_pool.rb:147:in `block in spawn_thread'
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT GET_LOCK('5878493172211724820', 0)[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.3ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+Migrating to CreateBoards (20230421112828)
+  [1m[35m (0.5ms)[0m  [1m[35mCREATE TABLE `boards` (`id` bigint NOT NULL AUTO_INCREMENT PRIMARY KEY, `title` varchar(255), `created_at` datetime(6) NOT NULL, `updated_at` datetime(6) NOT NULL)[0m
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT RELEASE_LOCK('5878493172211724820')[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (3.1ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+  [1m[36mActiveRecord::SchemaMigration Pluck (1.6ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+Started POST "/boards" for ::1 at 2023-04-21 14:36:18 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+Processing by BoardsController#create as */*
+  Parameters: {"title"=>"board2", "board"=>{"title"=>"board2"}}
+Completed 500 Internal Server Error in 69ms (ActiveRecord: 7.7ms | Allocations: 38257)
+
+
+  
+NameError (Rails couldn't find a valid model for User association. Please provide the :class_name option on the association declaration. If :class_name is already provided, make sure it's an ActiveRecord::Base subclass.):
+  
+app/controllers/boards_controller.rb:35:in `create'
+Started POST "/boards" for ::1 at 2023-04-21 14:37:35 +0300
+Processing by BoardsController#create as */*
+  Parameters: {"title"=>"board2", "board"=>{"title"=>"board2"}}
+Completed 500 Internal Server Error in 3ms (ActiveRecord: 3.3ms | Allocations: 1372)
+
+
+  
+NameError (Rails couldn't find a valid model for User association. Please provide the :class_name option on the association declaration. If :class_name is already provided, make sure it's an ActiveRecord::Base subclass.):
+  
+app/controllers/boards_controller.rb:36:in `create'
+Started POST "/boards" for ::1 at 2023-04-21 14:38:09 +0300
+  [1m[36mActiveRecord::SchemaMigration Pluck (0.2ms)[0m  [1m[34mSELECT `schema_migrations`.`version` FROM `schema_migrations` ORDER BY `schema_migrations`.`version` ASC[0m
+Processing by BoardsController#create as */*
+  Parameters: {"title"=>"board2", "board"=>{"title"=>"board2"}}
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/boards_controller.rb:36:in `create'
+  [1m[36mBoard Create (2.4ms)[0m  [1m[32mINSERT INTO `boards` (`title`, `created_at`, `updated_at`) VALUES ('board2', '2023-04-21 11:38:09.887678', '2023-04-21 11:38:09.887678')[0m
+  ↳ app/controllers/boards_controller.rb:36:in `create'
+  [1m[36mTRANSACTION (2.1ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/boards_controller.rb:36:in `create'
+Completed 201 Created in 62ms (Views: 0.3ms | ActiveRecord: 10.0ms | Allocations: 36147)
+
+
+Started POST "/boards" for ::1 at 2023-04-21 14:38:20 +0300
+Processing by BoardsController#create as */*
+  Parameters: {"title"=>"board3", "board"=>{"title"=>"board3"}}
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/boards_controller.rb:36:in `create'
+  [1m[36mBoard Create (7.9ms)[0m  [1m[32mINSERT INTO `boards` (`title`, `created_at`, `updated_at`) VALUES ('board3', '2023-04-21 11:38:20.292440', '2023-04-21 11:38:20.292440')[0m
+  ↳ app/controllers/boards_controller.rb:36:in `create'
+  [1m[36mTRANSACTION (1.7ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/boards_controller.rb:36:in `create'
+Completed 201 Created in 14ms (Views: 0.3ms | ActiveRecord: 9.8ms | Allocations: 1830)
+
+
+Started POST "/boards" for ::1 at 2023-04-21 14:38:25 +0300
+Processing by BoardsController#create as */*
+  Parameters: {"title"=>"board4", "board"=>{"title"=>"board4"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/boards_controller.rb:36:in `create'
+  [1m[36mBoard Create (0.6ms)[0m  [1m[32mINSERT INTO `boards` (`title`, `created_at`, `updated_at`) VALUES ('board4', '2023-04-21 11:38:25.975554', '2023-04-21 11:38:25.975554')[0m
+  ↳ app/controllers/boards_controller.rb:36:in `create'
+  [1m[36mTRANSACTION (1.9ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/boards_controller.rb:36:in `create'
+Completed 201 Created in 9ms (Views: 0.3ms | ActiveRecord: 2.7ms | Allocations: 1829)
+
+
+Started POST "/boards" for ::1 at 2023-04-21 14:38:29 +0300
+Processing by BoardsController#create as */*
+  Parameters: {"title"=>"board5", "board"=>{"title"=>"board5"}}
+  [1m[36mTRANSACTION (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/boards_controller.rb:36:in `create'
+  [1m[36mBoard Create (0.9ms)[0m  [1m[32mINSERT INTO `boards` (`title`, `created_at`, `updated_at`) VALUES ('board5', '2023-04-21 11:38:29.160540', '2023-04-21 11:38:29.160540')[0m
+  ↳ app/controllers/boards_controller.rb:36:in `create'
+  [1m[36mTRANSACTION (2.8ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/boards_controller.rb:36:in `create'
+Completed 201 Created in 8ms (Views: 0.2ms | ActiveRecord: 3.8ms | Allocations: 1829)
+
+
+Started GET "/boards" for ::1 at 2023-04-21 14:38:32 +0300
+Processing by BoardsController#index as */*
+  Parameters: {"title"=>"board5", "board"=>{"title"=>"board5"}}
+  [1m[36mBoard Load (0.5ms)[0m  [1m[34mSELECT `boards`.* FROM `boards`[0m
+  ↳ app/controllers/boards_controller.rb:10:in `index'
+Completed 200 OK in 4ms (Views: 2.9ms | ActiveRecord: 0.5ms | Allocations: 1003)
+
+
+Started GET "/boards/2" for ::1 at 2023-04-21 14:38:46 +0300
+Processing by BoardsController#show as */*
+  Parameters: {"title"=>"board5", "id"=>"2", "board"=>{"title"=>"board5"}}
+  [1m[36mBoard Load (0.3ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 2 LIMIT 1[0m
+  ↳ app/controllers/boards_controller.rb:19:in `show'
+Completed 200 OK in 16ms (Views: 0.3ms | ActiveRecord: 0.3ms | Allocations: 2118)
+
+
+Started PUT "/boards/2" for ::1 at 2023-04-21 14:39:03 +0300
+Processing by BoardsController#update as */*
+  Parameters: {"title"=>"board23", "id"=>"2", "board"=>{"title"=>"board23"}}
+  [1m[36mBoard Load (0.3ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 2 LIMIT 1[0m
+  ↳ app/controllers/boards_controller.rb:47:in `update'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/boards_controller.rb:49:in `update'
+  [1m[36mBoard Update (1.7ms)[0m  [1m[33mUPDATE `boards` SET `boards`.`title` = 'board23', `boards`.`updated_at` = '2023-04-21 11:39:03.563672' WHERE `boards`.`id` = 2[0m
+  ↳ app/controllers/boards_controller.rb:49:in `update'
+  [1m[36mTRANSACTION (1.7ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/boards_controller.rb:49:in `update'
+Completed 200 OK in 18ms (Views: 0.1ms | ActiveRecord: 4.0ms | Allocations: 2288)
+
+
+Started GET "/boards/2" for ::1 at 2023-04-21 14:39:08 +0300
+Processing by BoardsController#show as */*
+  Parameters: {"title"=>"board23", "id"=>"2", "board"=>{"title"=>"board23"}}
+  [1m[36mBoard Load (0.3ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 2 LIMIT 1[0m
+  ↳ app/controllers/boards_controller.rb:19:in `show'
+Completed 200 OK in 2ms (Views: 0.2ms | ActiveRecord: 0.3ms | Allocations: 594)
+
+
+Started GET "/boards/2/columns" for ::1 at 2023-04-21 14:39:13 +0300
+Processing by ColumnsController#index as */*
+  Parameters: {"title"=>"board23", "board_id"=>"2", "column"=>{"title"=>"board23"}}
+  [1m[36mBoard Load (0.4ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 2 LIMIT 1[0m
+  ↳ app/controllers/columns_controller.rb:78:in `get_board'
+  [1m[36mColumn Load (1.2ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`board_id` = 2[0m
+  ↳ app/controllers/columns_controller.rb:7:in `index'
+Completed 200 OK in 31ms (Views: 13.3ms | ActiveRecord: 3.9ms | Allocations: 6270)
+
+
+Started GET "/boards" for ::1 at 2023-04-21 14:39:33 +0300
+Processing by BoardsController#index as */*
+  Parameters: {"title"=>"board23", "board"=>{"title"=>"board23"}}
+  [1m[36mBoard Load (0.8ms)[0m  [1m[34mSELECT `boards`.* FROM `boards`[0m
+  ↳ app/controllers/boards_controller.rb:10:in `index'
+Completed 200 OK in 5ms (Views: 4.1ms | ActiveRecord: 0.8ms | Allocations: 945)
+
+
+Started POST "/boards" for ::1 at 2023-04-21 14:39:45 +0300
+Processing by BoardsController#create as */*
+  Parameters: {"title"=>"board5", "board"=>{"title"=>"board5"}}
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/boards_controller.rb:36:in `create'
+  [1m[36mBoard Create (10.0ms)[0m  [1m[32mINSERT INTO `boards` (`title`, `created_at`, `updated_at`) VALUES ('board5', '2023-04-21 11:39:45.501054', '2023-04-21 11:39:45.501054')[0m
+  ↳ app/controllers/boards_controller.rb:36:in `create'
+  [1m[36mTRANSACTION (2.5ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/boards_controller.rb:36:in `create'
+Completed 201 Created in 24ms (Views: 0.6ms | ActiveRecord: 12.9ms | Allocations: 1810)
+
+
+Started POST "/boards" for ::1 at 2023-04-21 14:39:50 +0300
+Processing by BoardsController#create as */*
+  Parameters: {"title"=>"board6", "board"=>{"title"=>"board6"}}
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/boards_controller.rb:36:in `create'
+  [1m[36mBoard Create (0.8ms)[0m  [1m[32mINSERT INTO `boards` (`title`, `created_at`, `updated_at`) VALUES ('board6', '2023-04-21 11:39:50.057139', '2023-04-21 11:39:50.057139')[0m
+  ↳ app/controllers/boards_controller.rb:36:in `create'
+  [1m[36mTRANSACTION (11.5ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/boards_controller.rb:36:in `create'
+Completed 201 Created in 22ms (Views: 0.4ms | ActiveRecord: 12.6ms | Allocations: 1810)
+
+
+Started POST "/boards" for ::1 at 2023-04-21 14:39:53 +0300
+Processing by BoardsController#create as */*
+  Parameters: {"title"=>"board7", "board"=>{"title"=>"board7"}}
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/boards_controller.rb:36:in `create'
+  [1m[36mBoard Create (0.9ms)[0m  [1m[32mINSERT INTO `boards` (`title`, `created_at`, `updated_at`) VALUES ('board7', '2023-04-21 11:39:53.131383', '2023-04-21 11:39:53.131383')[0m
+  ↳ app/controllers/boards_controller.rb:36:in `create'
+  [1m[36mTRANSACTION (3.1ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/boards_controller.rb:36:in `create'
+Completed 201 Created in 18ms (Views: 0.6ms | ActiveRecord: 4.6ms | Allocations: 1776)
+
+
+Started POST "/boards" for ::1 at 2023-04-21 14:40:00 +0300
+Processing by BoardsController#create as */*
+  Parameters: {"title"=>"board8", "board"=>{"title"=>"board8"}}
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/boards_controller.rb:36:in `create'
+  [1m[36mBoard Create (1.2ms)[0m  [1m[32mINSERT INTO `boards` (`title`, `created_at`, `updated_at`) VALUES ('board8', '2023-04-21 11:40:00.147815', '2023-04-21 11:40:00.147815')[0m
+  ↳ app/controllers/boards_controller.rb:36:in `create'
+  [1m[36mTRANSACTION (4.1ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/boards_controller.rb:36:in `create'
+Completed 201 Created in 12ms (Views: 0.3ms | ActiveRecord: 5.5ms | Allocations: 1810)
+
+
+Started POST "/boards/8/columns" for ::1 at 2023-04-21 14:43:24 +0300
+Processing by ColumnsController#create as */*
+  Parameters: {"title"=>"Column1", "position"=>1, "board_id"=>"8", "column"=>{"title"=>"Column1", "position"=>1}}
+  [1m[36mBoard Load (0.4ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 8 LIMIT 1[0m
+  ↳ app/controllers/columns_controller.rb:78:in `get_board'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/columns_controller.rb:26:in `create'
+  [1m[36mColumn Create (1.1ms)[0m  [1m[32mINSERT INTO `columns` (`title`, `created_at`, `updated_at`, `board_id`, `position`) VALUES ('Column1', '2023-04-21 11:43:24.108220', '2023-04-21 11:43:24.108220', 8, 1)[0m
+  ↳ app/controllers/columns_controller.rb:26:in `create'
+  [1m[36mTRANSACTION (2.4ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/columns_controller.rb:26:in `create'
+Completed 201 Created in 74ms (Views: 0.7ms | ActiveRecord: 14.7ms | Allocations: 17743)
+
+
+Started POST "/boards/8/columns" for ::1 at 2023-04-21 14:43:35 +0300
+Processing by ColumnsController#create as */*
+  Parameters: {"title"=>"Column2", "position"=>1, "board_id"=>"8", "column"=>{"title"=>"Column2", "position"=>1}}
+  [1m[36mBoard Load (0.8ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 8 LIMIT 1[0m
+  ↳ app/controllers/columns_controller.rb:78:in `get_board'
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/columns_controller.rb:26:in `create'
+  [1m[36mColumn Create (2.7ms)[0m  [1m[32mINSERT INTO `columns` (`title`, `created_at`, `updated_at`, `board_id`, `position`) VALUES ('Column2', '2023-04-21 11:43:36.028123', '2023-04-21 11:43:36.028123', 8, 1)[0m
+  ↳ app/controllers/columns_controller.rb:26:in `create'
+  [1m[36mTRANSACTION (7.0ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/columns_controller.rb:26:in `create'
+Completed 201 Created in 30ms (Views: 0.4ms | ActiveRecord: 10.9ms | Allocations: 2484)
+
+
+Started POST "/boards/8/columns" for ::1 at 2023-04-21 14:43:44 +0300
+Processing by ColumnsController#create as */*
+  Parameters: {"title"=>"Column0", "position"=>2, "board_id"=>"8", "column"=>{"title"=>"Column0", "position"=>2}}
+  [1m[36mBoard Load (0.5ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 8 LIMIT 1[0m
+  ↳ app/controllers/columns_controller.rb:78:in `get_board'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/columns_controller.rb:26:in `create'
+  [1m[36mColumn Create (0.5ms)[0m  [1m[32mINSERT INTO `columns` (`title`, `created_at`, `updated_at`, `board_id`, `position`) VALUES ('Column0', '2023-04-21 11:43:44.162444', '2023-04-21 11:43:44.162444', 8, 2)[0m
+  ↳ app/controllers/columns_controller.rb:26:in `create'
+  [1m[36mTRANSACTION (9.8ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/columns_controller.rb:26:in `create'
+Completed 201 Created in 19ms (Views: 0.2ms | ActiveRecord: 11.0ms | Allocations: 2479)
+
+
+Started POST "/boards/8/columns" for ::1 at 2023-04-21 14:43:51 +0300
+Processing by ColumnsController#create as */*
+  Parameters: {"title"=>"Column4", "position"=>3, "board_id"=>"8", "column"=>{"title"=>"Column4", "position"=>3}}
+  [1m[36mBoard Load (0.6ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 8 LIMIT 1[0m
+  ↳ app/controllers/columns_controller.rb:78:in `get_board'
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/columns_controller.rb:26:in `create'
+  [1m[36mColumn Create (1.1ms)[0m  [1m[32mINSERT INTO `columns` (`title`, `created_at`, `updated_at`, `board_id`, `position`) VALUES ('Column4', '2023-04-21 11:43:51.509259', '2023-04-21 11:43:51.509259', 8, 3)[0m
+  ↳ app/controllers/columns_controller.rb:26:in `create'
+  [1m[36mTRANSACTION (7.9ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/columns_controller.rb:26:in `create'
+Completed 201 Created in 24ms (Views: 0.6ms | ActiveRecord: 10.0ms | Allocations: 2480)
+
+
+Started POST "/boards/8/columns" for ::1 at 2023-04-21 14:43:57 +0300
+Processing by ColumnsController#create as */*
+  Parameters: {"title"=>"Column5", "position"=>4, "board_id"=>"8", "column"=>{"title"=>"Column5", "position"=>4}}
+  [1m[36mBoard Load (0.6ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 8 LIMIT 1[0m
+  ↳ app/controllers/columns_controller.rb:78:in `get_board'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/columns_controller.rb:26:in `create'
+  [1m[36mColumn Create (0.4ms)[0m  [1m[32mINSERT INTO `columns` (`title`, `created_at`, `updated_at`, `board_id`, `position`) VALUES ('Column5', '2023-04-21 11:43:57.543101', '2023-04-21 11:43:57.543101', 8, 4)[0m
+  ↳ app/controllers/columns_controller.rb:26:in `create'
+  [1m[36mTRANSACTION (10.0ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/columns_controller.rb:26:in `create'
+Completed 201 Created in 20ms (Views: 0.5ms | ActiveRecord: 11.3ms | Allocations: 2484)
+
+
+Started POST "/boards/8/columns" for ::1 at 2023-04-21 14:44:05 +0300
+Processing by ColumnsController#create as */*
+  Parameters: {"title"=>"Column6", "position"=>5, "board_id"=>"8", "column"=>{"title"=>"Column6", "position"=>5}}
+  [1m[36mBoard Load (0.4ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 8 LIMIT 1[0m
+  ↳ app/controllers/columns_controller.rb:78:in `get_board'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/columns_controller.rb:26:in `create'
+  [1m[36mColumn Create (0.5ms)[0m  [1m[32mINSERT INTO `columns` (`title`, `created_at`, `updated_at`, `board_id`, `position`) VALUES ('Column6', '2023-04-21 11:44:05.638079', '2023-04-21 11:44:05.638079', 8, 5)[0m
+  ↳ app/controllers/columns_controller.rb:26:in `create'
+  [1m[36mTRANSACTION (2.5ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/columns_controller.rb:26:in `create'
+Completed 201 Created in 16ms (Views: 0.3ms | ActiveRecord: 3.7ms | Allocations: 2440)
+
+
+Started POST "/boards/8/columns" for ::1 at 2023-04-21 14:44:12 +0300
+Processing by ColumnsController#create as */*
+  Parameters: {"title"=>"Column7", "position"=>6, "board_id"=>"8", "column"=>{"title"=>"Column7", "position"=>6}}
+  [1m[36mBoard Load (0.4ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 8 LIMIT 1[0m
+  ↳ app/controllers/columns_controller.rb:78:in `get_board'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/columns_controller.rb:26:in `create'
+  [1m[36mColumn Create (0.5ms)[0m  [1m[32mINSERT INTO `columns` (`title`, `created_at`, `updated_at`, `board_id`, `position`) VALUES ('Column7', '2023-04-21 11:44:12.833654', '2023-04-21 11:44:12.833654', 8, 6)[0m
+  ↳ app/controllers/columns_controller.rb:26:in `create'
+  [1m[36mTRANSACTION (9.1ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/columns_controller.rb:26:in `create'
+Completed 201 Created in 16ms (Views: 0.2ms | ActiveRecord: 10.2ms | Allocations: 2440)
+
+
+Started GET "/boards/8/columns" for ::1 at 2023-04-21 14:44:24 +0300
+Processing by ColumnsController#index as */*
+  Parameters: {"title"=>"Column7", "position"=>6, "board_id"=>"8", "column"=>{"title"=>"Column7", "position"=>6}}
+  [1m[36mBoard Load (0.4ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 8 LIMIT 1[0m
+  ↳ app/controllers/columns_controller.rb:78:in `get_board'
+  [1m[36mColumn Load (0.7ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`board_id` = 8[0m
+  ↳ app/controllers/columns_controller.rb:7:in `index'
+Completed 200 OK in 7ms (Views: 4.7ms | ActiveRecord: 1.0ms | Allocations: 1836)
+
+
+Started GET "/boards/8/columns/5" for ::1 at 2023-04-21 14:44:30 +0300
+Processing by ColumnsController#show as */*
+  Parameters: {"title"=>"Column7", "position"=>6, "board_id"=>"8", "id"=>"5", "column"=>{"title"=>"Column7", "position"=>6}}
+  [1m[36mBoard Load (0.3ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 8 LIMIT 1[0m
+  ↳ app/controllers/columns_controller.rb:78:in `get_board'
+  [1m[36mColumn Load (0.3ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`board_id` = 8 AND `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/controllers/columns_controller.rb:82:in `set_column'
+  [1m[36mColumn Load (0.3ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/controllers/columns_controller.rb:13:in `show'
+  [1m[36mCACHE Column Load (0.0ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/controllers/columns_controller.rb:14:in `show'
+Completed 200 OK in 6ms (Views: 0.2ms | ActiveRecord: 0.9ms | Allocations: 2233)
+
+
+Started GET "/boards/8/columns/5/stories" for ::1 at 2023-04-21 14:44:36 +0300
+Processing by StoriesController#index as */*
+  Parameters: {"title"=>"Column7", "position"=>6, "board_id"=>"8", "column_id"=>"5", "story"=>{"title"=>"Column7"}}
+  [1m[36mBoard Load (0.3ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 8 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:128:in `get_board'
+  [1m[36mColumn Load (0.3ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`board_id` = 8 AND `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:132:in `get_column'
+  [1m[36mStory Load (0.7ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`column_id` = 5 /* loading for inspect */ LIMIT 11[0m
+  ↳ app/controllers/stories_controller.rb:10:in `index'
+  [1m[36mStory Load (0.4ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`column_id` = 5[0m
+  ↳ app/controllers/stories_controller.rb:53:in `index'
+Completed 200 OK in 8ms (Views: 1.7ms | ActiveRecord: 3.0ms | Allocations: 2810)
+
+
+Started POST "/boards/8/columns/5/stories" for ::1 at 2023-04-21 14:46:11 +0300
+Processing by StoriesController#create as */*
+  Parameters: {"title"=>"B8C5S1", "content"=>"Content1", "position"=>1, "status"=>1, "due_date"=>"2023-04-25", "board_id"=>"8", "column_id"=>"5", "story"=>{"title"=>"B8C5S1", "content"=>"Content1", "status"=>1, "due_date"=>"2023-04-25"}}
+  [1m[36mBoard Load (0.4ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 8 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:128:in `get_board'
+  [1m[36mColumn Load (0.3ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`board_id` = 8 AND `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:132:in `get_column'
+  [1m[36mTRANSACTION (0.6ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+  [1m[36mStory Create (0.8ms)[0m  [1m[32mINSERT INTO `stories` (`title`, `content`, `created_at`, `updated_at`, `column_id`, `status`, `due_date`) VALUES ('B8C5S1', 'Content1', '2023-04-21 11:46:11.741236', '2023-04-21 11:46:11.741236', 5, 1, '2023-04-25')[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+  [1m[36mTRANSACTION (2.8ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+Completed 201 Created in 30ms (Views: 0.3ms | ActiveRecord: 6.8ms | Allocations: 17912)
+
+
+Started POST "/boards/8/columns/5/stories" for ::1 at 2023-04-21 14:46:22 +0300
+Processing by StoriesController#create as */*
+  Parameters: {"title"=>"B8C5S2", "content"=>"Content2", "position"=>2, "status"=>1, "due_date"=>"2023-04-25", "board_id"=>"8", "column_id"=>"5", "story"=>{"title"=>"B8C5S2", "content"=>"Content2", "status"=>1, "due_date"=>"2023-04-25"}}
+  [1m[36mBoard Load (0.5ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 8 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:128:in `get_board'
+  [1m[36mColumn Load (0.9ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`board_id` = 8 AND `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:132:in `get_column'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+  [1m[36mStory Create (0.6ms)[0m  [1m[32mINSERT INTO `stories` (`title`, `content`, `created_at`, `updated_at`, `column_id`, `status`, `due_date`) VALUES ('B8C5S2', 'Content2', '2023-04-21 11:46:22.347382', '2023-04-21 11:46:22.347382', 5, 1, '2023-04-25')[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+  [1m[36mTRANSACTION (9.5ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+Completed 201 Created in 26ms (Views: 0.3ms | ActiveRecord: 11.7ms | Allocations: 3193)
+
+
+Started POST "/boards/8/columns/5/stories" for ::1 at 2023-04-21 14:46:34 +0300
+Processing by StoriesController#create as */*
+  Parameters: {"title"=>"B8C5S3", "content"=>"Content3", "position"=>3, "status"=>2, "due_date"=>"2023-04-25", "board_id"=>"8", "column_id"=>"5", "story"=>{"title"=>"B8C5S3", "content"=>"Content3", "status"=>2, "due_date"=>"2023-04-25"}}
+  [1m[36mBoard Load (0.6ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 8 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:128:in `get_board'
+  [1m[36mColumn Load (0.6ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`board_id` = 8 AND `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:132:in `get_column'
+  [1m[36mTRANSACTION (0.4ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+  [1m[36mStory Create (0.5ms)[0m  [1m[32mINSERT INTO `stories` (`title`, `content`, `created_at`, `updated_at`, `column_id`, `status`, `due_date`) VALUES ('B8C5S3', 'Content3', '2023-04-21 11:46:34.251930', '2023-04-21 11:46:34.251930', 5, 2, '2023-04-25')[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+  [1m[36mTRANSACTION (9.6ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+Completed 201 Created in 22ms (Views: 0.2ms | ActiveRecord: 11.8ms | Allocations: 3193)
+
+
+Started POST "/boards/8/columns/5/stories" for ::1 at 2023-04-21 14:46:46 +0300
+Processing by StoriesController#create as */*
+  Parameters: {"title"=>"B8C5S4", "content"=>"Content3", "position"=>3, "status"=>2, "due_date"=>"2023-04-25", "board_id"=>"8", "column_id"=>"5", "story"=>{"title"=>"B8C5S4", "content"=>"Content3", "status"=>2, "due_date"=>"2023-04-25"}}
+  [1m[36mBoard Load (0.5ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 8 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:128:in `get_board'
+  [1m[36mColumn Load (0.7ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`board_id` = 8 AND `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:132:in `get_column'
+  [1m[36mTRANSACTION (0.7ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+  [1m[36mStory Create (1.2ms)[0m  [1m[32mINSERT INTO `stories` (`title`, `content`, `created_at`, `updated_at`, `column_id`, `status`, `due_date`) VALUES ('B8C5S4', 'Content3', '2023-04-21 11:46:46.067457', '2023-04-21 11:46:46.067457', 5, 2, '2023-04-25')[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+  [1m[36mTRANSACTION (9.6ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+Completed 201 Created in 28ms (Views: 0.2ms | ActiveRecord: 12.7ms | Allocations: 3193)
+
+
+Started POST "/boards/8/columns/5/stories" for ::1 at 2023-04-21 14:46:48 +0300
+Processing by StoriesController#create as */*
+  Parameters: {"title"=>"B8C5S5", "content"=>"Content3", "position"=>3, "status"=>2, "due_date"=>"2023-04-25", "board_id"=>"8", "column_id"=>"5", "story"=>{"title"=>"B8C5S5", "content"=>"Content3", "status"=>2, "due_date"=>"2023-04-25"}}
+  [1m[36mBoard Load (0.5ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 8 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:128:in `get_board'
+  [1m[36mColumn Load (0.5ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`board_id` = 8 AND `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:132:in `get_column'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+  [1m[36mStory Create (0.4ms)[0m  [1m[32mINSERT INTO `stories` (`title`, `content`, `created_at`, `updated_at`, `column_id`, `status`, `due_date`) VALUES ('B8C5S5', 'Content3', '2023-04-21 11:46:48.856406', '2023-04-21 11:46:48.856406', 5, 2, '2023-04-25')[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+  [1m[36mTRANSACTION (3.9ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+Completed 201 Created in 19ms (Views: 1.5ms | ActiveRecord: 5.5ms | Allocations: 3193)
+
+
+Started POST "/boards/8/columns/5/stories" for ::1 at 2023-04-21 14:46:55 +0300
+Processing by StoriesController#create as */*
+  Parameters: {"title"=>"CS1", "content"=>"Content3", "position"=>3, "status"=>2, "due_date"=>"2023-04-25", "board_id"=>"8", "column_id"=>"5", "story"=>{"title"=>"CS1", "content"=>"Content3", "status"=>2, "due_date"=>"2023-04-25"}}
+  [1m[36mBoard Load (0.3ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 8 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:128:in `get_board'
+  [1m[36mColumn Load (0.3ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`board_id` = 8 AND `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:132:in `get_column'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+  [1m[36mStory Create (0.5ms)[0m  [1m[32mINSERT INTO `stories` (`title`, `content`, `created_at`, `updated_at`, `column_id`, `status`, `due_date`) VALUES ('CS1', 'Content3', '2023-04-21 11:46:55.147150', '2023-04-21 11:46:55.147150', 5, 2, '2023-04-25')[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+  [1m[36mTRANSACTION (2.0ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+Completed 201 Created in 13ms (Views: 0.2ms | ActiveRecord: 3.5ms | Allocations: 3193)
+
+
+Started POST "/boards/8/columns/5/stories" for ::1 at 2023-04-21 14:46:58 +0300
+Processing by StoriesController#create as */*
+  Parameters: {"title"=>"CS2", "content"=>"Content3", "position"=>3, "status"=>2, "due_date"=>"2023-04-25", "board_id"=>"8", "column_id"=>"5", "story"=>{"title"=>"CS2", "content"=>"Content3", "status"=>2, "due_date"=>"2023-04-25"}}
+  [1m[36mBoard Load (0.3ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 8 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:128:in `get_board'
+  [1m[36mColumn Load (1.4ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`board_id` = 8 AND `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:132:in `get_column'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+  [1m[36mStory Create (0.4ms)[0m  [1m[32mINSERT INTO `stories` (`title`, `content`, `created_at`, `updated_at`, `column_id`, `status`, `due_date`) VALUES ('CS2', 'Content3', '2023-04-21 11:46:58.057164', '2023-04-21 11:46:58.057164', 5, 2, '2023-04-25')[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+  [1m[36mTRANSACTION (9.2ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+Completed 201 Created in 29ms (Views: 0.3ms | ActiveRecord: 11.6ms | Allocations: 3193)
+
+
+Started POST "/boards/8/columns/5/stories" for ::1 at 2023-04-21 14:47:00 +0300
+Processing by StoriesController#create as */*
+  Parameters: {"title"=>"CS3", "content"=>"Content3", "position"=>3, "status"=>2, "due_date"=>"2023-04-25", "board_id"=>"8", "column_id"=>"5", "story"=>{"title"=>"CS3", "content"=>"Content3", "status"=>2, "due_date"=>"2023-04-25"}}
+  [1m[36mBoard Load (0.5ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 8 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:128:in `get_board'
+  [1m[36mColumn Load (0.3ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`board_id` = 8 AND `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:132:in `get_column'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+  [1m[36mStory Create (0.5ms)[0m  [1m[32mINSERT INTO `stories` (`title`, `content`, `created_at`, `updated_at`, `column_id`, `status`, `due_date`) VALUES ('CS3', 'Content3', '2023-04-21 11:47:00.859130', '2023-04-21 11:47:00.859130', 5, 2, '2023-04-25')[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+  [1m[36mTRANSACTION (9.9ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+Completed 201 Created in 22ms (Views: 0.3ms | ActiveRecord: 11.4ms | Allocations: 3193)
+
+
+Started POST "/boards/8/columns/5/stories" for ::1 at 2023-04-21 14:47:04 +0300
+Processing by StoriesController#create as */*
+  Parameters: {"title"=>"CS4", "content"=>"Content3", "position"=>3, "status"=>2, "due_date"=>"2023-04-25", "board_id"=>"8", "column_id"=>"5", "story"=>{"title"=>"CS4", "content"=>"Content3", "status"=>2, "due_date"=>"2023-04-25"}}
+  [1m[36mBoard Load (0.4ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 8 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:128:in `get_board'
+  [1m[36mColumn Load (1.1ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`board_id` = 8 AND `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:132:in `get_column'
+  [1m[36mTRANSACTION (0.3ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+  [1m[36mStory Create (1.4ms)[0m  [1m[32mINSERT INTO `stories` (`title`, `content`, `created_at`, `updated_at`, `column_id`, `status`, `due_date`) VALUES ('CS4', 'Content3', '2023-04-21 11:47:04.780561', '2023-04-21 11:47:04.780561', 5, 2, '2023-04-25')[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+  [1m[36mTRANSACTION (9.0ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+Completed 201 Created in 42ms (Views: 0.6ms | ActiveRecord: 12.1ms | Allocations: 3196)
+
+
+Started POST "/boards/8/columns/5/stories" for ::1 at 2023-04-21 14:47:12 +0300
+Processing by StoriesController#create as */*
+  Parameters: {"title"=>"CS5", "content"=>"Contenetag", "position"=>3, "status"=>2, "due_date"=>"2023-04-25", "board_id"=>"8", "column_id"=>"5", "story"=>{"title"=>"CS5", "content"=>"Contenetag", "status"=>2, "due_date"=>"2023-04-25"}}
+  [1m[36mBoard Load (0.9ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 8 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:128:in `get_board'
+  [1m[36mColumn Load (0.4ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`board_id` = 8 AND `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:132:in `get_column'
+  [1m[36mTRANSACTION (0.5ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+  [1m[36mStory Create (0.6ms)[0m  [1m[32mINSERT INTO `stories` (`title`, `content`, `created_at`, `updated_at`, `column_id`, `status`, `due_date`) VALUES ('CS5', 'Contenetag', '2023-04-21 11:47:12.401406', '2023-04-21 11:47:12.401406', 5, 2, '2023-04-25')[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+  [1m[36mTRANSACTION (2.0ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+Completed 201 Created in 15ms (Views: 0.3ms | ActiveRecord: 4.4ms | Allocations: 3156)
+
+
+Started POST "/boards/8/columns/5/stories" for ::1 at 2023-04-21 14:47:28 +0300
+Processing by StoriesController#create as */*
+  Parameters: {"title"=>"CS0", "content"=>"Contenetag", "position"=>11, "status"=>1, "due_date"=>"2023-04-22", "board_id"=>"8", "column_id"=>"5", "story"=>{"title"=>"CS0", "content"=>"Contenetag", "status"=>1, "due_date"=>"2023-04-22"}}
+  [1m[36mBoard Load (0.4ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 8 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:128:in `get_board'
+  [1m[36mColumn Load (0.5ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`board_id` = 8 AND `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:132:in `get_column'
+  [1m[36mTRANSACTION (0.2ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+  [1m[36mStory Create (0.6ms)[0m  [1m[32mINSERT INTO `stories` (`title`, `content`, `created_at`, `updated_at`, `column_id`, `status`, `due_date`) VALUES ('CS0', 'Contenetag', '2023-04-21 11:47:28.963575', '2023-04-21 11:47:28.963575', 5, 1, '2023-04-22')[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+  [1m[36mTRANSACTION (8.9ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/stories_controller.rb:86:in `create'
+Completed 201 Created in 21ms (Views: 0.2ms | ActiveRecord: 10.5ms | Allocations: 3193)
+
+
+Started GET "/boards/8/columns/5/stories" for ::1 at 2023-04-21 14:47:35 +0300
+Processing by StoriesController#index as */*
+  Parameters: {"title"=>"CS0", "content"=>"Contenetag", "position"=>11, "status"=>1, "due_date"=>"2023-04-22", "board_id"=>"8", "column_id"=>"5", "story"=>{"title"=>"CS0", "content"=>"Contenetag", "status"=>1, "due_date"=>"2023-04-22"}}
+  [1m[36mBoard Load (3.5ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 8 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:128:in `get_board'
+  [1m[36mColumn Load (0.6ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`board_id` = 8 AND `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:132:in `get_column'
+  [1m[36mStory Load (0.7ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`column_id` = 5 /* loading for inspect */ LIMIT 11[0m
+  ↳ app/controllers/stories_controller.rb:10:in `index'
+Completed 500 Internal Server Error in 30ms (ActiveRecord: 4.8ms | Allocations: 3799)
+
+
+  
+NoMethodError (undefined method `split' for 1:Integer):
+  
+app/controllers/stories_controller.rb:18:in `index'
+Started GET "/boards/8/columns/5/stories" for ::1 at 2023-04-21 14:48:34 +0300
+Processing by StoriesController#index as */*
+  Parameters: {"title"=>"CS0", "content"=>"Contenetag", "position"=>11, "status"=>1, "due_date"=>"2023-04-22", "board_id"=>"8", "column_id"=>"5", "story"=>{"title"=>"CS0", "content"=>"Contenetag", "status"=>1, "due_date"=>"2023-04-22"}}
+  [1m[36mBoard Load (0.3ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 8 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:128:in `get_board'
+  [1m[36mColumn Load (0.7ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`board_id` = 8 AND `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:132:in `get_column'
+  [1m[36mStory Load (1.5ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`column_id` = 5 /* loading for inspect */ LIMIT 11[0m
+  ↳ app/controllers/stories_controller.rb:10:in `index'
+  [1m[36mStory Load (0.6ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`column_id` = 5[0m
+  ↳ app/controllers/stories_controller.rb:53:in `index'
+Completed 200 OK in 63ms (Views: 6.9ms | ActiveRecord: 12.7ms | Allocations: 13174)
+
+
+Started GET "/boards/8/columns/5/stories" for ::1 at 2023-04-21 14:48:45 +0300
+Processing by StoriesController#index as */*
+  Parameters: {"title"=>"CS0", "content"=>"Contenetag", "position"=>11, "status"=>1, "due_date"=>"2023-04-22", "board_id"=>"8", "column_id"=>"5", "story"=>{"title"=>"CS0", "content"=>"Contenetag", "status"=>1, "due_date"=>"2023-04-22"}}
+  [1m[36mBoard Load (0.4ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 8 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:127:in `get_board'
+  [1m[36mColumn Load (0.4ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`board_id` = 8 AND `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:131:in `get_column'
+  [1m[36mStory Load (0.4ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`column_id` = 5[0m
+  ↳ app/controllers/stories_controller.rb:52:in `index'
+Completed 200 OK in 43ms (Views: 10.7ms | ActiveRecord: 11.9ms | Allocations: 11641)
+
+
+Started GET "/boards/8/columns/5/stories" for ::1 at 2023-04-21 14:52:24 +0300
+Processing by StoriesController#index as */*
+  Parameters: {"title"=>"CS0", "content"=>"Contenetag", "position"=>11, "status"=>1, "due_date"=>"2023-04-22", "board_id"=>"8", "column_id"=>"5", "story"=>{"title"=>"CS0", "content"=>"Contenetag", "status"=>1, "due_date"=>"2023-04-22"}}
+  [1m[36mBoard Load (0.4ms)[0m  [1m[34mSELECT `boards`.* FROM `boards` WHERE `boards`.`id` = 8 LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:127:in `get_board'
+  [1m[36mColumn Load (0.8ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`board_id` = 8 AND `columns`.`id` = 5 ORDER BY `columns`.`position` ASC LIMIT 1[0m
+  ↳ app/controllers/stories_controller.rb:131:in `get_column'
+  [1m[36mStory Load (1.0ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`column_id` = 5 ORDER BY `stories`.`title` ASC, `stories`.`due_date` ASC[0m
+  ↳ app/controllers/stories_controller.rb:52:in `index'
+Completed 200 OK in 64ms (Views: 12.0ms | ActiveRecord: 17.3ms | Allocations: 12145)
+
+
+  [1m[36mColumn Load (0.4ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/services/stories_retriever.rb:32:in `filter_by_status_and_date'
+  [1m[36mStory Count (2.6ms)[0m  [1m[34mSELECT COUNT(*) FROM `stories` WHERE `stories`.`column_id` = 5 AND `stories`.`due_date` BETWEEN '2023-03-22' AND '2023-05-21'[0m
+  ↳ app/services/stories_retriever_spec.rb:15:in `block (3 levels) in <top (required)>'
+  [1m[36mColumn Load (0.5ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/services/stories_retriever.rb:32:in `filter_by_status_and_date'
+  [1m[36mStory Count (0.4ms)[0m  [1m[34mSELECT COUNT(*) FROM `stories` WHERE `stories`.`column_id` = 5[0m
+  ↳ app/services/stories_retriever_spec.rb:28:in `block (3 levels) in <top (required)>'
+  [1m[36mColumn Load (0.3ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/services/stories_retriever.rb:32:in `filter_by_status_and_date'
+  [1m[36mStory Count (1.0ms)[0m  [1m[34mSELECT COUNT(*) FROM `stories` WHERE `stories`.`column_id` = 5 AND `stories`.`status` = 2[0m
+  ↳ app/services/stories_retriever_spec.rb:40:in `block (3 levels) in <top (required)>'
+  [1m[36mColumn Load (0.4ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/services/stories_retriever.rb:32:in `filter_by_status_and_date'
+  [1m[36mStory Count (0.6ms)[0m  [1m[34mSELECT COUNT(*) FROM `stories` WHERE `stories`.`column_id` = 5 AND `stories`.`status` = 2 AND `stories`.`due_date` BETWEEN '2023-03-22' AND '2023-05-21'[0m
+  ↳ app/services/stories_retriever_spec.rb:51:in `block (3 levels) in <top (required)>'
+  [1m[36mStory Load (0.2ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`id` = 9 ORDER BY `stories`.`title` ASC LIMIT 1[0m
+  ↳ app/services/stories_retriever_spec.rb:61:in `block (2 levels) in <top (required)>'
+  [1m[36mStory Load (0.7ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`id` = 10 ORDER BY `stories`.`title` ASC LIMIT 1[0m
+  ↳ app/services/stories_retriever_spec.rb:62:in `block (2 levels) in <top (required)>'
+  [1m[36mStory Load (0.3ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`id` = 11 ORDER BY `stories`.`title` ASC LIMIT 1[0m
+  ↳ app/services/stories_retriever_spec.rb:63:in `block (2 levels) in <top (required)>'
+  [1m[36mColumn Load (0.3ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/services/stories_retriever.rb:48:in `order_by'
+  [1m[36mStory Load (0.5ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`column_id` = 5 ORDER BY `stories`.`title` ASC[0m
+  ↳ app/services/stories_retriever_spec.rb:73:in `map'
+  [1m[36mStory Load (0.8ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`id` = 9 ORDER BY `stories`.`title` ASC LIMIT 1[0m
+  ↳ app/services/stories_retriever_spec.rb:61:in `block (2 levels) in <top (required)>'
+  [1m[36mStory Load (0.5ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`id` = 10 ORDER BY `stories`.`title` ASC LIMIT 1[0m
+  ↳ app/services/stories_retriever_spec.rb:62:in `block (2 levels) in <top (required)>'
+  [1m[36mStory Load (0.6ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`id` = 11 ORDER BY `stories`.`title` ASC LIMIT 1[0m
+  ↳ app/services/stories_retriever_spec.rb:63:in `block (2 levels) in <top (required)>'
+  [1m[36mColumn Load (0.8ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/services/stories_retriever.rb:48:in `order_by'
+  [1m[36mStory Load (1.0ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`column_id` = 5 ORDER BY `stories`.`title` DESC[0m
+  ↳ app/services/stories_retriever_spec.rb:79:in `map'
+  [1m[36mStory Load (0.4ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`id` = 9 ORDER BY `stories`.`title` ASC LIMIT 1[0m
+  ↳ app/services/stories_retriever_spec.rb:61:in `block (2 levels) in <top (required)>'
+  [1m[36mStory Load (0.5ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`id` = 10 ORDER BY `stories`.`title` ASC LIMIT 1[0m
+  ↳ app/services/stories_retriever_spec.rb:62:in `block (2 levels) in <top (required)>'
+  [1m[36mStory Load (0.5ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`id` = 11 ORDER BY `stories`.`title` ASC LIMIT 1[0m
+  ↳ app/services/stories_retriever_spec.rb:63:in `block (2 levels) in <top (required)>'
+  [1m[36mColumn Load (0.4ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/services/stories_retriever.rb:48:in `order_by'
+  [1m[36mStory Load (0.5ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`column_id` = 5 ORDER BY `stories`.`created_at` ASC[0m
+  ↳ app/services/stories_retriever_spec.rb:85:in `map'
+  [1m[36mStory Load (0.9ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`id` = 9 ORDER BY `stories`.`title` ASC LIMIT 1[0m
+  ↳ app/services/stories_retriever_spec.rb:61:in `block (2 levels) in <top (required)>'
+  [1m[36mStory Load (0.3ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`id` = 10 ORDER BY `stories`.`title` ASC LIMIT 1[0m
+  ↳ app/services/stories_retriever_spec.rb:62:in `block (2 levels) in <top (required)>'
+  [1m[36mStory Load (0.2ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`id` = 11 ORDER BY `stories`.`title` ASC LIMIT 1[0m
+  ↳ app/services/stories_retriever_spec.rb:63:in `block (2 levels) in <top (required)>'
+  [1m[36mColumn Load (0.2ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/services/stories_retriever.rb:48:in `order_by'
+  [1m[36mStory Load (0.4ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`column_id` = 5 ORDER BY `stories`.`created_at` DESC[0m
+  ↳ app/services/stories_retriever_spec.rb:91:in `map'
+  [1m[36mStory Load (0.5ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`id` = 9 ORDER BY `stories`.`title` ASC LIMIT 1[0m
+  ↳ app/services/stories_retriever_spec.rb:61:in `block (2 levels) in <top (required)>'
+  [1m[36mStory Load (0.4ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`id` = 10 ORDER BY `stories`.`title` ASC LIMIT 1[0m
+  ↳ app/services/stories_retriever_spec.rb:62:in `block (2 levels) in <top (required)>'
+  [1m[36mStory Load (0.3ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`id` = 11 ORDER BY `stories`.`title` ASC LIMIT 1[0m
+  ↳ app/services/stories_retriever_spec.rb:63:in `block (2 levels) in <top (required)>'
+  [1m[36mColumn Load (0.4ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/services/stories_retriever.rb:48:in `order_by'
+  [1m[36mStory Load (0.4ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`column_id` = 5 ORDER BY `stories`.`status` ASC[0m
+  ↳ app/services/stories_retriever_spec.rb:97:in `map'
+  [1m[36mStory Load (0.6ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`id` = 9 ORDER BY `stories`.`title` ASC LIMIT 1[0m
+  ↳ app/services/stories_retriever_spec.rb:61:in `block (2 levels) in <top (required)>'
+  [1m[36mStory Load (0.4ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`id` = 10 ORDER BY `stories`.`title` ASC LIMIT 1[0m
+  ↳ app/services/stories_retriever_spec.rb:62:in `block (2 levels) in <top (required)>'
+  [1m[36mStory Load (0.4ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`id` = 11 ORDER BY `stories`.`title` ASC LIMIT 1[0m
+  ↳ app/services/stories_retriever_spec.rb:63:in `block (2 levels) in <top (required)>'
+  [1m[36mColumn Load (0.4ms)[0m  [1m[34mSELECT `columns`.* FROM `columns` WHERE `columns`.`id` = 5 LIMIT 1[0m
+  ↳ app/services/stories_retriever.rb:48:in `order_by'
+  [1m[36mStory Load (0.4ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`column_id` = 5 ORDER BY `stories`.`status` DESC[0m
+  ↳ app/services/stories_retriever_spec.rb:103:in `map'
+  [1m[36mStory Load (0.2ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`id` = 9 ORDER BY `stories`.`title` ASC LIMIT 1[0m
+  ↳ app/services/stories_retriever_spec.rb:61:in `block (2 levels) in <top (required)>'
+  [1m[36mStory Load (0.2ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`id` = 10 ORDER BY `stories`.`title` ASC LIMIT 1[0m
+  ↳ app/services/stories_retriever_spec.rb:62:in `block (2 levels) in <top (required)>'
+  [1m[36mStory Load (0.2ms)[0m  [1m[34mSELECT `stories`.* FROM `stories` WHERE `stories`.`id` = 11 ORDER BY `stories`.`title` ASC LIMIT 1[0m
+  ↳ app/services/stories_retriever_spec.rb:63:in `block (2 levels) in <top (required)>'
